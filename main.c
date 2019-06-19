@@ -1,28 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <math.h>
+//---------------------------------------------
 typedef struct na{
-    char second[50];
-    char first[50];
+    char second[50]; //Фамилия
+    char first[50]; //Имя
 } nam;
-
+//---------------------------------------------
  typedef struct camps{
-    nam *name;
-    nam *parent;
-    char tp[11];
-    int group;
-    int shift;
+    nam *name; //Имя ребенка
+    nam *parent; //Имя родителя
+    char tp[11]; //Номер телефона из 11 цифр
+    int group; //Группа ребенка
+    int shift; //Смена на которую едет ребенок
 
 } camp;
-
+//---------------------------------------------
 typedef struct LNode{
-    camp* data;
+    camp* data; //структура camps
     struct LNode* next;
 }LN;
 
 void(*func[2])(LN* l, int N);
 
+//---------------------------------------------
+
+//Получаем из файла
 camp *getP(FILE *input){
     camp* result;
     result = (camp*)malloc(sizeof(camp));
@@ -34,6 +38,9 @@ camp *getP(FILE *input){
     return result;
 }
 
+//---------------------------------------------
+
+//Получаем в список
 LN* getL(FILE* f){
     LN* l;
     l = (LN*)malloc(sizeof(LN));
@@ -44,6 +51,9 @@ LN* getL(FILE* f){
     return l;
 }
 
+//---------------------------------------------
+
+//Создаем новый элемент списка
 LN* createnewNode(){
     LN* newNode;
     camp* result;
@@ -63,7 +73,9 @@ LN* createnewNode(){
     return newNode;
 }
 
+//---------------------------------------------
 
+//Пишем на экране элементы списка
 void printP(camp* child){
     printf("%d: %d | %s %s | %s %s: %s");
     for(int i = 0; i< 120; i++){
@@ -80,20 +92,32 @@ void printP(camp* child){
 
 }
 
+//---------------------------------------------
+
+//Вывод в файл
 void fprintP(FILE* f, camp* p){
 
     fprintf(f, "%d %d %s %s %s %s %s", p->shift, p->group, p->name->second,
                 p->name->first, p->parent->second, p->parent->first, p->tp);
 }
 
+//---------------------------------------------
+
+//Вывод на экран список
 void printNode(LN* l){
     printP(l->data);
 }
 
+//---------------------------------------------
+
+//Вывод в файл список
 void fprintNode(FILE* f, LN* l){
     fprintP(f, l->data);
 }
 
+//---------------------------------------------
+
+//Удаляем
 void deleteNode(LN* l, int ID, int N){
     LN* prew, *tmp;
     LN* now = l;
@@ -125,6 +149,9 @@ void deleteNode(LN* l, int ID, int N){
     }
 }
 
+//---------------------------------------------
+
+//Сравнение
 int comperison(char* a, char* b){
     int result;
     int i = 0, flag = 1;
@@ -145,7 +172,9 @@ int comperison(char* a, char* b){
     return result;
 }
 
+//---------------------------------------------
 
+//Меняем местами
 void swap(LN* l, LN* n){
     camp* tmp;
     tmp = l->data;
@@ -153,9 +182,10 @@ void swap(LN* l, LN* n){
     n->data = tmp;
 }
 
+//---------------------------------------------
 
-
-LN* copy(LN* n){
+//Копируем
+LN* writing(LN* n){
     LN* l;
     l = (LN*)malloc(sizeof(LN));
     l->data = n->data;
@@ -163,6 +193,9 @@ LN* copy(LN* n){
     return l;
 }
 
+//---------------------------------------------
+
+//Пишем на экран
 void reading(LN* l, int N){
     int flag = 1;
     if(N>0){
@@ -177,19 +210,25 @@ void reading(LN* l, int N){
 
             }else{
 
-        printf("You have no one character!!!Pres any key to back to menu!!!");
+        printf("You have no one children!!!Press any key to back to menu!");
         scanf("%d", &flag);
     }
 }
 
+//---------------------------------------------
+
+//Добавляем на последнее место
 void addLast(LN* l, LN* n){
     LN* now = l;
     while(now->next!=NULL){
         now = now->next;
     }
-    now->next = copy(n);
+    now->next = writing(n);
 }
 
+//---------------------------------------------
+
+//Редактируем
 void editNode(LN* l, int ID){
     LN* now = l;
     for(int i = 0; i < ID; i++){
@@ -224,6 +263,7 @@ void editNode(LN* l, int ID){
         }
 }
 
+//Ищем среди имен
 int findName(LN* l, char* str, int N){
     LN* result;
     result = (LN*)malloc(sizeof(result));
@@ -240,7 +280,9 @@ int findName(LN* l, char* str, int N){
     return -1;
 }
 
+//---------------------------------------------
 
+//ищем среди строчных переменных структур
 void findStr(LN* l, char* str, int N){
     LN* result;
     result = (LN*)malloc(sizeof(result));
@@ -261,7 +303,7 @@ void findStr(LN* l, char* str, int N){
         }
         if(ent == 1){
             if(count == 0){
-                result = copy(now);
+                result = writing(now);
             }
             else{
                 addLast(result, now);
@@ -274,7 +316,9 @@ void findStr(LN* l, char* str, int N){
     reading(result, count);
 }
 
+//---------------------------------------------
 
+//Сортировка по имени
 void sortName(LN* l, int N){
     LN* now  = l;
     for(int i = 0; i < N; i++){
@@ -289,6 +333,9 @@ void sortName(LN* l, int N){
     }
 }
 
+//---------------------------------------------
+
+//Сортировка по имени родителей
 void sortParent(LN* l, int N){
     LN* now  = l;
     for(int i = 0; i < N; i++){
@@ -303,6 +350,9 @@ void sortParent(LN* l, int N){
     }
 }
 
+//---------------------------------------------
+
+//Сортировка по сменам
 void sortShift(LN* l, int N){
     LN* now  = l;
     for(int i = 0; i < N; i++){
@@ -317,7 +367,9 @@ void sortShift(LN* l, int N){
     }
 }
 
+//---------------------------------------------
 
+//Сортировка по группе
 void sortGroup(LN* l, int N){
     LN* now  = l;
     for(int i = 0; i < N; i++){
@@ -332,7 +384,9 @@ void sortGroup(LN* l, int N){
     }
 }
 
+//---------------------------------------------
 
+//Сортировка - меню
 void sort(LN* l, int N){
     printf("Choose:\n1 - sort by child's name\n2 - sort by parent's name\n3 - sort by shift\n4 - sort by group\n5 - back to menu\n");
     int t = 0, flag = 1;;
@@ -344,7 +398,7 @@ void sort(LN* l, int N){
     }
 }
 
-
+//Добавляем в конце
 void entryintheend(LN* header, LN* node, int N){
     int t;
     LN* now = header;
@@ -353,6 +407,9 @@ void entryintheend(LN* header, LN* node, int N){
     now->next = node;
 }
 
+//---------------------------------------------
+
+//Меню
 int menu(LN* l, int N){
     int flag = 1;
     int flag2 = 1;
@@ -424,6 +481,9 @@ int menu(LN* l, int N){
     return N;
 }
 
+//---------------------------------------------
+
+//Сохраняем в файл
 void reWrite(FILE* f, LN* l, int N){
     LN* now = l;
     fprintf(f, "%d\n", N);
@@ -433,7 +493,7 @@ void reWrite(FILE* f, LN* l, int N){
     }
 }
 
-
+//---------------------------------------------
 
 int main()
 {
