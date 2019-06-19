@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1560588667 source:c:\prog\курсовая\menu.c
+
+1560967866 source:c:\prog\курсовая\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
