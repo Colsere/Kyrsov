@@ -30,9 +30,11 @@ void(*func[2])(LN* l, int N);
 camp *getP(FILE *input){
     camp* result;
     result = (camp*)malloc(sizeof(camp));
+    result->name = (nam*)malloc(sizeof(nam));
+    result->parent = (nam*)malloc(sizeof(nam));
     if(result!=NULL){
         fscanf(input, "%d %d %s %s %s %s %s",
-                &result->shift, &result->group, &result->name->second, &result->name->first, &result->parent->second, &result->parent->first, &result->tp);
+                &result->shift, &result->group, &result->name->second, &result->name->first, &result->tp, &result->parent->second, &result->parent->first);
 
     }
     return result;
@@ -58,6 +60,8 @@ LN* createnewNode(){
     LN* newNode;
     camp* result;
     result = (camp*)malloc(sizeof(camp));
+    result->name = (nam*)malloc(sizeof(nam));
+    result->parent = (nam*)malloc(sizeof(nam));
     if(result!=NULL){
         printf("Enter second name and the first one of the child: ");
         scanf("%s %s", &result->name->second, &result->name->first);
@@ -77,15 +81,8 @@ LN* createnewNode(){
 
 //Пишем на экране элементы списка
 void printP(camp* child){
-    printf("%d: %d | %s %s | %s %s: %s");
-    for(int i = 0; i< 120; i++){
-        printf("-");
-    }
     printf("%s %s from group number: %d %d camping shift", child->name->second, child->name->first, child->group, child->shift);
-    for(int i = 0; i< 120; i++){
-        printf("-");
-    }
-    printf("\nParents: %s %s\t|%d", child->parent->second, child->parent->first, child->tp);
+    printf("\nParents: %s %s | %s\n", child->parent->second, child->parent->first, child->tp);
     for(int i = 0; i< 120; i++){
         printf("-");
     }
@@ -98,7 +95,7 @@ void printP(camp* child){
 void fprintP(FILE* f, camp* p){
 
     fprintf(f, "%d %d %s %s %s %s %s", p->shift, p->group, p->name->second,
-                p->name->first, p->parent->second, p->parent->first, p->tp);
+            p->name->first, p->tp, p->parent->second, p->parent->first );
 }
 
 //---------------------------------------------
@@ -427,9 +424,11 @@ int menu(LN* l, int N){
         switch(ch){
     case 1:
         reading(l, N);
+        system("pause");
         break;
     case 2:
         system("cls");
+        reading(l, N);
         printf("Please, write second name of child, which you want to delete:\n ");
         scanf("%s", &k);
         ki = findName(l, k, N);
