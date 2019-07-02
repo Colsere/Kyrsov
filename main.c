@@ -32,8 +32,8 @@ camp *getP(FILE *input){
     result = (camp*)malloc(sizeof(camp));
     result->name = (nam*)malloc(sizeof(nam));
     result->parent = (nam*)malloc(sizeof(nam));
-    if(result!=NULL){
-        fscanf(input, "%d %d %s %s %s %s %s",
+    if((result!=NULL)&&(result->name!=NULL)&&(result->parent!=NULL)){
+                fscanf(input, "%d %d %s %s %s %s %s",
                 &result->shift, &result->group, &result->name->second, &result->name->first, &result->tp, &result->parent->second, &result->parent->first);
 
     }
@@ -94,7 +94,7 @@ void printP(camp* child){
 //Вывод в файл
 void fprintP(FILE* f, camp* p){
 
-    fprintf(f, "%d %d %s %s %s %s %s", p->shift, p->group, p->name->second,
+    fprintf(f, "%d %d %s %s %s %s %s\n", p->shift, p->group, p->name->second,
             p->name->first, p->tp, p->parent->second, p->parent->first );
 }
 
@@ -202,7 +202,7 @@ void reading(LN* l, int N){
         system("cls");
             for (int i = 0; i < N; i++){
             printNode(now);
-            now->next;
+            now = now->next;
             }
 
             }else{
@@ -401,6 +401,7 @@ void entryintheend(LN* header, LN* node, int N){
     LN* now = header;
     for(int i = 0; i < N-1; i++) now = now->next;
     printNode(now);
+    system("pause");
     now->next = node;
 }
 
@@ -412,7 +413,7 @@ int menu(LN* l, int N){
     int flag2 = 1;
     char str[50];
     printf("Tuliandin Egor. 8307\n");
-    printf("You'r welcome to file cabinet of children, who will go to the camp.");
+    printf("You'r welcome to file cabinet of children, who will go to the camp.\n");
     system("pause");
     while(flag){
         system("cls");
@@ -428,14 +429,13 @@ int menu(LN* l, int N){
         break;
     case 2:
         system("cls");
-        reading(l, N);
-        printf("Please, write second name of child, which you want to delete:\n ");
-        scanf("%s", &k);
-        ki = findName(l, k, N);
-        if((ki <= N)&&(ki != -1)){
-            deleteNode(l, ki, N);
+        printf("Please enter ID of child: ");
+        scanf("%d", &k);
+        if(k <= N+1){
+            deleteNode(l, k, N);
             N--;
         }
+        break;
         break;
     case 3:
         system("cls");
@@ -453,18 +453,19 @@ int menu(LN* l, int N){
             printf("Please enter request: ");
             scanf("%s", &str);
             findStr(l, str, N);
+            system("pause");
             system("cls");
-            printf("0 - exit to menu\nAnother one - try again\n");
+            printf("0 - exit to menu\n1 - try again\n");
             scanf("%d", &flag2);
         }
         break;
     case 6:
         system("cls");
-        printf("Please enter second name of child: ");
+        reading(l, N);
+        printf("Please enter id of child: ");
         scanf("%d", &k);
-        ki = findName(l, k, N);
-        if((ki <= N)&&(ki != -1)){
-            editNode(l, ki);
+        if(k <= N){
+            editNode(l, k);
         }
         break;
     case 7:
@@ -506,12 +507,14 @@ int main()
     fscanf(input, "%d", &N);
     LN* header;
     LN* now;
-    header = getL(input);
+    int i;
+    header = getL(input); //Может быть здесь
     if(header!=NULL){
         now = header;
-        for(int i = 1; i< N; i++){
-            now->next = getL(input);
+        for( i = 1; i< N; i++){
             now = now->next;
+            now = getL(input); //Или здесь
+
         }
         N = menu(header, N);
     }

@@ -1,7 +1,7 @@
 # depslib dependency file v1.0
 1560588667 source:c:\prog\курсовая\menu.c
 
-1562018962 source:c:\prog\курсовая\main.c
+1562047493 source:c:\prog\курсовая\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
